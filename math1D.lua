@@ -5,7 +5,7 @@ function math1D.clamp(x, x1, x2)
 end
 
 function math1D.smoothstep(x1, x2, x)
-    x = clamp((x - x1) / (x2 - x1), 0, 1)
+    x = math1D.clamp((x - x1) / (x2 - x1), 0, 1)
     return 3 * x * x - 2 * x * x * x
 end
 

@@ -1,17 +1,17 @@
-local PhysicsDraw = {}
-PhysicsDraw.__index = PhysicsDraw
+local WorldView = {}
+WorldView.__index = WorldView
 
-function PhysicsDraw.new(world, callback)
-    draw = {}
-    setmetatable(draw, PhysicsDraw)
+function WorldView.new(world, callback)
+    local view = {}
+    setmetatable(view, WorldView)
 
-    draw._world = world
-    draw._callback = callback
+    view._world = world
+    view._callback = callback
 
-    return draw
+    return view
 end
 
-function PhysicsDraw:draw()
+function WorldView:draw()
     local bodies = self._world:getBodyList()
     for i, body in pairs(bodies) do
         if callback and callback.beginBody then
@@ -57,4 +57,4 @@ function PhysicsDraw:draw()
     end
 end
 
-return PhysicsDraw
+return WorldView

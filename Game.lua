@@ -1,5 +1,5 @@
 local Camera = require "Camera"
-local PhysicsDraw = require "PhysicsDraw"
+local WorldView = require "WorldView"
 
 local Game = {}
 Game.__index = Game
@@ -10,7 +10,7 @@ function Game.new()
 
     game._camera = Camera.new()
     game._world = love.physics.newWorld()
-    game._physicsDraw = PhysicsDraw.new(game._world)
+    game._worldView = WorldView.new(game._world)
 
     game._models = {}
 
@@ -42,7 +42,7 @@ function Game:draw()
     self._camera:setViewport(0, windowHeight, windowWidth, 0)
 
     self._camera:draw()
-    self._physicsDraw:draw()
+    self._worldView:draw()
 end
 
 return Game

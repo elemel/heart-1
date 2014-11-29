@@ -33,4 +33,10 @@ function Application:draw()
     end
 end
 
+function Application:keypressed(key, isrepeat)
+    if self._screen then
+        self._screen:keypressed(key, isrepeat)
+    end
+end
+
 return Application

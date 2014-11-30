@@ -1,5 +1,3 @@
-local Game = require "Game"
-
 local GameScreen = {}
 GameScreen.__index = GameScreen
 

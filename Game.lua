@@ -57,13 +57,13 @@ function Game:update(dt)
         local subject = self._models[self._cameraSubjectId]
         if subject then
             local x, y = subject:getPosition()
-            self._camera:setPosition(x, 20)
+            self._camera:setPosition(x, 0)
         end
     end
 end
 
 function Game:draw()
-    love.graphics.setBackgroundColor(127, 191, 191)
+    love.graphics.setBackgroundColor(127, 223, 255)
 
     local width, height = love.window.getDimensions()
     self._camera:setViewport(0, height, width, 0)

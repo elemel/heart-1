@@ -46,9 +46,9 @@ function CircleSprite:draw()
     love.graphics.setColor(colors.toByteColor(r, g, b, a))
     love.graphics.circle("fill", x, y, radius, self._segments)
 
-    love.graphics.setColor(colors.toByteColor(0.5 * r, 0.5 * g, 0.5 * b, a))
-    love.graphics.circle("line", x, y, radius, self._segments)
-    love.graphics.line(x1, y1, x2, y2)
+    -- love.graphics.setColor(colors.toByteColor(0.5 * r, 0.5 * g, 0.5 * b, a))
+    -- love.graphics.circle("line", x, y, radius, self._segments)
+    -- love.graphics.line(x1, y1, x2, y2)
 end
 
 function CircleSprite:getColor()

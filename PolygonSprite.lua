@@ -53,8 +53,8 @@ function PolygonSprite:draw()
     love.graphics.setColor(colors.toByteColor(r, g, b, a))
     love.graphics.polygon("fill", self._vertices)
 
-    love.graphics.setColor(colors.toByteColor(0.5 * r, 0.5 * g, 0.5 * b, a))
-    love.graphics.polygon("line", self._vertices)
+    -- love.graphics.setColor(colors.toByteColor(0.5 * r, 0.5 * g, 0.5 * b, a))
+    -- love.graphics.polygon("line", self._vertices)
 
     love.graphics.pop()
 end

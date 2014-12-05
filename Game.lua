@@ -35,6 +35,8 @@ function Game.new(config)
     game._viewCreators = {}
     game._views = {}
 
+    game._shaders = {}
+
     game._worldViewEnabled = false
 
     return game
@@ -177,6 +179,14 @@ end
 
 function Game:setCameraSubjectId(id)
     self._cameraSubjectId = id
+end
+
+function Game:getShader(name)
+    return self._shaders[name]
+end
+
+function Game:setShader(name, shader)
+    self._shaders[name] = shader
 end
 
 function Game:_beginContact(fixture1, fixture2, contact)

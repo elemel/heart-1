@@ -15,7 +15,7 @@ function Sprite.new(config)
     sprite._angle = config.angle or 0
     sprite._scale = config.scale or {1, 1}
     sprite._origin = config.origin or {0, 0}
-    sprite._color = config.color or {1, 1, 1, 1}
+    sprite._color = config.color or {255, 255, 255, 255}
 
     return sprite
 end
@@ -26,6 +26,14 @@ end
 
 function Sprite:setImage(image)
     self._image = image
+end
+
+function Sprite:getShader()
+    return self._shader
+end
+
+function Sprite:setShader(shader)
+    self._shader = shader
 end
 
 function Sprite:getPosition()
@@ -77,8 +85,15 @@ function Sprite:draw()
             local sx, sy = unpack(self._scale)
             local ox, oy = unpack(self._origin)
 
-            love.graphics.setColor(colors.toByteColor(cr, cg, cb, ca))
+            love.graphics.setBlendMode("premultiplied")
+            love.graphics.setShader(self._shader)
+            if self._shader then
+                self._shader:send("textureSize", {self._image:getDimensions()})
+            end
+            love.graphics.setColor(cr, cg, cb, ca)
             love.graphics.draw(self._image, x, y, r, sx, sy, ox, oy)
+            love.graphics.setShader(nil)
+            love.graphics.setBlendMode("alpha")
         end
     end
 end

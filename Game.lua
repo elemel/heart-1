@@ -17,8 +17,8 @@ function Game.new(config)
     game._time = 0
     game._camera = Camera.new({scale = 0.03})
 
-    local gravity = config.gravity or 10
-    game._world = love.physics.newWorld(0, -gravity, true)
+    local gravityX, gravityY = unpack(config.gravity or {0, 0})
+    game._world = love.physics.newWorld(gravityX, gravityY, true)
     game._world:setCallbacks(
         function(...) game:_beginContact(...) end,
         function(...) game:_endContact(...) end,

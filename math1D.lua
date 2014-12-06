@@ -1,5 +1,9 @@
 local math1D = {}
 
+function math1D.sign(x)
+    return x < 0 and -1 or 1
+end
+
 function math1D.clamp(x, x1, x2)
     return math.min(math.max(x, x1), x2)
 end

@@ -1,5 +1,14 @@
 local math2D = {}
 
+function math2D.length(x, y)
+    return math.sqrt(x * x + y * y)
+end
+
+function math2D.normalize(x, y)
+    local length = math2D.length(x, y)
+    return x / length, y / length, length
+end
+
 function math2D.fbm(x, y, noise, octave, lacunarityX, lacunarityY, gain)
     noise = noise or love.math.noise
     octave = octave or 3

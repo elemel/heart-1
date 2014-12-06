@@ -15,7 +15,9 @@ function Game.new(config)
 
     game._nextId = 1
     game._time = 0
-    game._camera = Camera.new({scale = 0.03})
+
+    local cameraScale = config.cameraScale or 0.03
+    game._camera = Camera.new({scale = cameraScale})
 
     local gravityX, gravityY = unpack(config.gravity or {0, 0})
     game._world = love.physics.newWorld(gravityX, gravityY, true)

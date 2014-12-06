@@ -35,6 +35,7 @@ function Game.new(config)
     game._viewCreators = {}
     game._views = {}
 
+    game._images = {}
     game._shaders = {}
 
     game._worldViewEnabled = false
@@ -179,6 +180,14 @@ end
 
 function Game:setCameraSubjectId(id)
     self._cameraSubjectId = id
+end
+
+function Game:getImage(name)
+    return self._images[name]
+end
+
+function Game:setImage(name, image)
+    self._images[name] = image
 end
 
 function Game:getShader(name)

@@ -66,8 +66,6 @@ function Game:update(dt)
 end
 
 function Game:draw()
-    love.graphics.setBackgroundColor(127, 223, 255)
-
     local width, height = love.window.getDimensions()
     self._camera:setViewport(0, height, width, 0)
     self._camera:draw()

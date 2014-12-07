@@ -164,6 +164,17 @@ function Game:getModelByType(modelType)
     return nil
 end
 
+function Game:getModelsByType(modelType)
+    local modelArray = {}
+    local models = self._modelsByType[modelType]
+    if models then
+        for id, model in pairs(models) do
+            table.insert(modelArray, model)
+        end
+    end
+    return modelArray
+end
+
 function Game:generateId()
     local id = self._nextId
     self._nextId = self._nextId + 1

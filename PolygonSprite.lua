@@ -13,7 +13,8 @@ function PolygonSprite.new(config)
     sprite._vertices = config.vertices or {-1, -1, 1, -1, 1, 1, -1, 1}
     sprite._position = config.position or {0, 0}
     sprite._angle = config.angle or 0
-    sprite._color = config.color or {1, 1, 1, 1}
+    sprite._fillColor = config.fillColor or {255, 255, 255, 255}
+    sprite._lineColor = config.lineColor or {0, 0, 0, 0}
 
     return sprite
 end
@@ -34,29 +35,44 @@ function PolygonSprite:setAngle(angle)
     self._angle = angle
 end
 
-function PolygonSprite:getColor()
-    return unpack(self._color)
+function PolygonSprite:getFillColor()
+    return unpack(self._fillColor)
 end
 
-function PolygonSprite:setColor(r, g, b, a)
-    self._color = {r, g, b, a}
+function PolygonSprite:setFillColor(r, g, b, a)
+    self._fillColor = {r, g, b, a}
+end
+
+function PolygonSprite:getLineColor()
+    return unpack(self._lineColor)
+end
+
+function PolygonSprite:setLineColor(r, g, b, a)
+    self._lineColor = {r, g, b, a}
 end
 
 function PolygonSprite:draw()
-    local r, g, b, a = unpack(self._color)
-    local x, y = unpack(self._position)
+    local fillRed, fillGreen, fillBlue, fillAlpha = unpack(self._fillColor)
+    local lineRed, lineGreen, lineBlue, lineAlpha = unpack(self._lineColor)
+    if fillAlpha > 0 or lineAlpha > 0 then
+        local x, y = unpack(self._position)
 
-    love.graphics.push()
-    love.graphics.translate(x, y)
-    love.graphics.rotate(self._angle)
+        love.graphics.push()
+        love.graphics.translate(x, y)
+        love.graphics.rotate(self._angle)
 
-    love.graphics.setColor(colors.toByteColor(r, g, b, a))
-    love.graphics.polygon("fill", self._vertices)
+        if fillAlpha > 0 then
+            love.graphics.setColor(fillRed, fillGreen, fillBlue, fillAlpha)
+            love.graphics.polygon("fill", self._vertices)
+        end
 
-    -- love.graphics.setColor(colors.toByteColor(0.5 * r, 0.5 * g, 0.5 * b, a))
-    -- love.graphics.polygon("line", self._vertices)
+        if lineAlpha > 0 then
+            love.graphics.setColor(lineRed, lineGreen, lineBlue, lineAlpha)
+            love.graphics.polygon("line", self._vertices)
+        end
 
-    love.graphics.pop()
+        love.graphics.pop()
+    end
 end
 
 return PolygonSprite

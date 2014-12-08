@@ -39,6 +39,7 @@ function Game.new(config)
 
     game._images = {}
     game._shaders = {}
+    game._sounds = {}
 
     game._worldViewEnabled = false
 
@@ -207,6 +208,21 @@ end
 
 function Game:setShader(name, shader)
     self._shaders[name] = shader
+end
+
+function Game:getSound(name)
+    return self._sounds[name]
+end
+
+function Game:setSound(name, sound)
+    self._sounds[name] = sound
+end
+
+function Game:playSound(name)
+    local sound = self._sounds[name]
+    if sound then
+        love.audio.play(sound:clone())
+    end
 end
 
 function Game:_beginContact(fixture1, fixture2, contact)

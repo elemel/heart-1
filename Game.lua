@@ -50,10 +50,6 @@ function Game:update(dt)
     self._time = self._time + dt
 
     for id, model in pairs(self._models) do
-        if model:getType() == "block" then
-            local data = model:save()
-            model:load(data)
-        end
         model:update(dt)
     end
 

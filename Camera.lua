@@ -1,3 +1,7 @@
+local path = (...):match(".+%.") or ""
+
+local AffineTransformation2 = require(path .. "AffineTransformation2")
+
 local Camera = {}
 Camera.__index = Camera
 
@@ -92,6 +96,22 @@ end
 function Camera:getPixelWorldSize()
     local scaleX, scaleY = self:getViewportScale()
     return 0.5 / self._scale / math.min(math.abs(scaleX), math.abs(scaleY))
+end
+
+function Camera:toWorld(screenX, screenY)
+    local viewportX, viewportY = self:getViewportCenter()
+    local viewportScaleX, viewportScaleY = self:getViewportScale()
+    local x, y = unpack(self._position)
+
+    local transformation = AffineTransformation2.new()
+    transformation:translate(viewportX, viewportY)
+    transformation:scale(viewportScaleX, viewportScaleY)
+
+    transformation:scale(self._scale, self._scale)
+    transformation:rotate(self._angle)
+    transformation:translate(-x, -y)
+    transformation:invert()
+    return transformation:transformPoint(screenX, screenY)
 end
 
 return Camera

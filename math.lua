@@ -8,6 +8,10 @@ function math_.clamp(x, x1, x2)
     return math.min(math.max(x, x1), x2)
 end
 
+function math_.mix(x1, x2, t)
+    return x1 + t * (x2 - x1)
+end
+
 function math_.smoothstep(x1, x2, x)
     x = math_.clamp((x - x1) / (x2 - x1), 0, 1)
     return 3 * x * x - 2 * x * x * x

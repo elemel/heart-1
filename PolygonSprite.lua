@@ -1,7 +1,5 @@
 local path = (...):match(".+%.") or ""
 
-local colors = require(path .. "colors")
-
 local PolygonSprite = {}
 PolygonSprite.__index = PolygonSprite
 

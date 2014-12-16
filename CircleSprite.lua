@@ -1,7 +1,5 @@
 local path = (...):match(".+%.") or ""
 
-local colors = require(path .. "colors")
-
 local CircleSprite = {}
 CircleSprite.__index = CircleSprite
 

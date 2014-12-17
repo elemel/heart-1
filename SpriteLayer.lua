@@ -1,6 +1,4 @@
-local path = (...):match(".+%.") or ""
-
-local LinkedSet = require(path .. "LinkedSet")
+local LinkedSet = require "heart.LinkedSet"
 
 local SpriteLayer = {}
 SpriteLayer.__index = SpriteLayer

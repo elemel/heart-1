@@ -1,6 +1,4 @@
-local path = (...):match(".+%.") or ""
-
-local AffineTransformation2 = require(path .. "AffineTransformation2")
+local AffineTransformation2 = require "heart.AffineTransformation2"
 
 local Camera = {}
 Camera.__index = Camera

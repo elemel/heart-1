@@ -1,5 +1,3 @@
-local path = (...):match(".+%.") or ""
-
 local CircleSprite = {}
 CircleSprite.__index = CircleSprite
 

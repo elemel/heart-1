@@ -1,5 +1,3 @@
-local path = (...):match(".+%.") or ""
-
 local PolygonSprite = {}
 PolygonSprite.__index = PolygonSprite
 

@@ -1,8 +1,6 @@
-local path = (...):match(".+%.") or ""
-
-local Camera = require(path .. "Camera")
-local Scene = require(path .. "Scene")
-local WorldView = require(path .. "WorldView")
+local Camera = require "heart.Camera"
+local Scene = require "heart.Scene"
+local WorldView = require "heart.WorldView"
 
 local Game = {}
 Game.__index = Game

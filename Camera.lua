@@ -96,7 +96,7 @@ function Camera:getPixelWorldSize()
     return 0.5 / self._scale / math.min(math.abs(scaleX), math.abs(scaleY))
 end
 
-function Camera:toWorld(screenX, screenY)
+function Camera:getTransformation()
     local viewportX, viewportY = self:getViewportCenter()
     local viewportScaleX, viewportScaleY = self:getViewportScale()
     local x, y = unpack(self._position)
@@ -108,8 +108,14 @@ function Camera:toWorld(screenX, screenY)
     transformation:scale(self._scale, self._scale)
     transformation:rotate(self._angle)
     transformation:translate(-x, -y)
+
+    return transformation
+end
+
+function Camera:getInverseTransformation()
+    local transformation = self:getTransformation()
     transformation:invert()
-    return transformation:transformPoint(screenX, screenY)
+    return transformation
 end
 
 return Camera

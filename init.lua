@@ -28,6 +28,8 @@ heart.graphics.newScene = Scene.new
 heart.graphics.newSprite = Sprite.new
 heart.graphics.newSpriteLayer = SpriteLayer.new
 
+heart.mouse = require "heart.mouse"
+
 heart.game = {}
 heart.game.newGame = Game.new
 heart.game.newWorldView = WorldView.new

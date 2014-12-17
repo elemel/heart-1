@@ -9,8 +9,8 @@ function CircleSprite.new(config)
     sprite._position = config.position or {0, 0}
     sprite._radius = config.radius or 1
     sprite._angle = config.angle or 0
-    sprite._fillColor = config.fillColor or {255, 255, 255, 255}
-    sprite._lineColor = config.lineColor or {0, 0, 0, 0}
+    sprite._fillColor = config.fillColor or config.color or {255, 255, 255, 255}
+    sprite._lineColor = config.lineColor or config.color or {255, 255, 255, 255}
     sprite._segments = config.segments or 32
 
     return sprite

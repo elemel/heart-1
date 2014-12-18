@@ -32,6 +32,8 @@ function Game.new(config)
     game._models = {}
     game._modelsByType = {}
 
+    game._contactHandlers = {}
+
     game._viewCreators = {}
     game._views = {}
 
@@ -99,6 +101,25 @@ end
 
 function Game:setModelCreator(type, creator)
     self._modelCreators[type] = creator
+end
+
+function Game:getContactHandler(type1, type2)
+    local handlers = self._contactHandlers
+    if handlers[type1] and handlers[type1][type2] then
+        return handlers[type1][type2], false
+    elseif handlers[type2] and handlers[type2][type1] then
+        return handlers[type2][type1], true
+    else
+        return nil, false
+    end
+end
+
+function Game:setContactHandler(type1, type2, handler)
+    local handlers = self._contactHandlers
+    if not handlers[type1] then
+        handlers[type1] = {}
+    end
+    handlers[type1][type2] = handler
 end
 
 function Game:setViewCreator(type, creator)
@@ -234,6 +255,19 @@ function Game:_beginContact(fixture1, fixture2, contact)
     if model2 and model2.beginContact then
         model2:beginContact(fixture2, fixture1, contact, true)
     end
+
+    local type1 = model1 and model1:getType()
+    local type2 = model2 and model2:getType()
+    if type1 and type2 then
+        local handler, reversed = self:getContactHandler(type1, type2)
+        if handler then
+            if reversed then
+                handler:beginContact(fixture2, fixture1, contact, true)
+            else
+                handler:beginContact(fixture1, fixture2, contact, false)
+            end
+        end
+    end
 end
 
 function Game:_endContact(fixture1, fixture2, contact)
@@ -247,6 +281,19 @@ function Game:_endContact(fixture1, fixture2, contact)
     if model2 and model2.endContact then
         model2:endContact(fixture2, fixture1, contact, true)
     end
+
+    local type1 = model1 and model1:getType()
+    local type2 = model2 and model2:getType()
+    if type1 and type2 then
+        local handler, reversed = self:getContactHandler(type1, type2)
+        if handler then
+            if reversed then
+                handler:endContact(fixture2, fixture1, contact, true)
+            else
+                handler:endContact(fixture1, fixture2, contact, false)
+            end
+        end
+    end
 end
 
 function Game:_preSolve(fixture1, fixture2, contact)
@@ -259,6 +306,19 @@ function Game:_preSolve(fixture1, fixture2, contact)
     end
     if model2 and model2.preSolve then
         model2:preSolve(fixture2, fixture1, contact, true)
+    end
+
+    local type1 = model1 and model1:getType()
+    local type2 = model2 and model2:getType()
+    if type1 and type2 then
+        local handler, reversed = self:getContactHandler(type1, type2)
+        if handler then
+            if reversed then
+                handler:preSolve(fixture2, fixture1, contact, true)
+            else
+                handler:preSolve(fixture1, fixture2, contact, false)
+            end
+        end
     end
 end
 
@@ -278,6 +338,23 @@ function Game:_postSolve(fixture1, fixture2, contact,
         model2:postSolve(fixture2, fixture1, contact,
             normalImpulse1, tangentImpulse1, normalImpulse2, tangentImpulse2,
             true)
+    end
+
+    local type1 = model1 and model1:getType()
+    local type2 = model2 and model2:getType()
+    if type1 and type2 then
+        local handler, reversed = self:getContactHandler(type1, type2)
+        if handler then
+            if reversed then
+                handler:postSolve(
+                    fixture2, fixture1, contact, normalImpulse1,
+                    tangentImpulse1, normalImpulse2, tangentImpulse2, true)
+            else
+                handler:postSolve(
+                    fixture1, fixture2, contact, normalImpulse1,
+                    tangentImpulse1, normalImpulse2, tangentImpulse2, false)
+            end
+        end
     end
 end
 

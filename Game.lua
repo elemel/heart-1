@@ -28,13 +28,13 @@ function Game.new(config)
 
     game._scene = Scene.new()
 
-    game._modelCreators = {}
+    game._modelFactories = {}
     game._models = {}
     game._modelsByType = {}
 
     game._contactHandlers = {}
 
-    game._viewCreators = {}
+    game._viewFactories = {}
     game._views = {}
 
     game._images = {}
@@ -95,8 +95,8 @@ function Game:getScene()
     return self._scene
 end
 
-function Game:setModelCreator(type, creator)
-    self._modelCreators[type] = creator
+function Game:setModelFactory(type, factory)
+    self._modelFactories[type] = factory
 end
 
 function Game:getContactHandler(type1, type2)
@@ -118,8 +118,8 @@ function Game:setContactHandler(type1, type2, handler)
     handlers[type1][type2] = handler
 end
 
-function Game:setViewCreator(type, creator)
-    self._viewCreators[type] = creator
+function Game:setViewFactory(type, factory)
+    self._viewFactories[type] = factory
 end
 
 function Game:isWorldViewEnabled()
@@ -131,9 +131,9 @@ function Game:setWorldViewEnabled(enabled)
 end
 
 function Game:newModel(type, config)
-    local creator = self._modelCreators[type]
+    local factory = self._modelFactories[type]
     local id = self:generateId()
-    local model = creator(self, id, config)
+    local model = factory(self, id, config)
     self:addModel(model)
     return model
 end
@@ -148,9 +148,9 @@ function Game:addModel(model)
     self._modelsByType[modelType][id] = model
     model:create()
 
-    local viewCreator = self._viewCreators[modelType]
-    if viewCreator then
-        local view = viewCreator(self, model)
+    local viewFactory = self._viewFactories[modelType]
+    if viewFactory then
+        local view = viewFactory(self, model)
         self._views[id] = view
         view:create()
     end

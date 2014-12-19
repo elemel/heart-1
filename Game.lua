@@ -37,6 +37,9 @@ function Game.new(config)
     game._viewFactories = {}
     game._views = {}
 
+    game._controllerFactories = {}
+    game._controllers = {}
+
     game._images = {}
     game._shaders = {}
     game._sounds = {}
@@ -48,6 +51,10 @@ end
 
 function Game:update(dt)
     self._time = self._time + dt
+
+    for id, controller in pairs(self._controllers) do
+        controller:update(dt)
+    end
 
     for id, model in pairs(self._models) do
         model:update(dt)
@@ -122,6 +129,10 @@ function Game:setViewFactory(type, factory)
     self._viewFactories[type] = factory
 end
 
+function Game:setControllerFactory(type, factory)
+    self._controllerFactories[type] = factory
+end
+
 function Game:isWorldViewEnabled()
     return self._worldViewEnabled
 end
@@ -154,10 +165,24 @@ function Game:addModel(model)
         self._views[id] = view
         view:create()
     end
+
+    local controllerFactory = self._controllerFactories[modelType]
+    if controllerFactory then
+        local controller = controllerFactory(self, model)
+        self._controllers[id] = controller
+        controller:create()
+    end
 end
 
 function Game:removeModel(model)
     local id = model:getId()
+
+    local controller = self._controllers[id]
+    if controller then
+        controller:destroy()
+        self._controllers[id] = nil
+    end
+
     local view = self._views[id]
     if view then
         view:destroy()

@@ -64,6 +64,14 @@ function math_.normalize2(x, y)
     return x / length, y / length, length
 end
 
+function math_.shuffle(array, random)
+    random = random or love.math.random
+    for i = #array, 1, -1 do
+        local j = random(1, i)
+        array[i], array[j] = array[j], array[i]
+    end
+end
+
 -- Adapted from Taehl: http://love2d.org/wiki/HSL_color
 function math_.toRgbFromHsl(h, s, l)
     if s <= 0 then

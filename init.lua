@@ -34,6 +34,11 @@ heart.game = {}
 heart.game.newGame = Game.new
 heart.game.newWorldView = WorldView.new
 
+function heart.game.newEntity(game, config)
+    local factory = game:getEntityFactory(config.type)
+    return factory(game, config)
+end
+
 heart.application = {}
 heart.application.newApplication = Application.new
 heart.application.newGameScreen = GameScreen.new

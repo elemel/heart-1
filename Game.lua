@@ -113,6 +113,12 @@ function Game:removeEntity(entity)
     end
 end
 
+function Game:getEntityByType(type_)
+    local entities = self._entitiesByType[type_]
+    local entity = entities and next(entities)
+    return entity
+end
+
 function Game:getEntitiesByType(type_)
     return self._entitiesByType[type_]
 end

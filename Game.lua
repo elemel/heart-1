@@ -12,6 +12,8 @@ function Game.new(config)
     config = config or {}
 
     game._time = 0
+    game._fixedTime = 0
+    game._fixedDt = config.fixedDt
 
     local cameraScale = config.cameraScale or 0.1
     game._camera = Camera.new({scale = cameraScale})
@@ -31,9 +33,18 @@ end
 
 function Game:update(dt)
     self._time = self._time + dt
-
-    for entity in self._entities:iterate() do
-        entity:update(dt)
+    if self._fixedDt then
+        if self._fixedTime + self._fixedDt < self._time then
+            self._fixedTime = self._fixedTime + self._fixedDt
+            for entity in self._entities:iterate() do
+                entity:update(self._fixedDt)
+            end
+        end
+    else
+        self._fixedTime = self._time
+        for entity in self._entities:iterate() do
+            entity:update(dt)
+        end
     end
 end
 
@@ -52,6 +63,22 @@ end
 
 function Game:getTime()
     return self._time
+end
+
+function Game:getFixedTime()
+    return self._fixedTime
+end
+
+function Game:getFixedDt()
+    return self._fixedDt
+end
+
+function Game:getFixedTimeFraction()
+    if self._fixedDt then
+        return (self._time - self._fixedTime) / self._fixedDt
+    else
+        return 1
+    end
 end
 
 function Game:getScene()

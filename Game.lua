@@ -1,4 +1,3 @@
-local Camera = require "heart.Camera"
 local Scene = require "heart.Scene"
 local WorldView = require "heart.WorldView"
 
@@ -15,9 +14,6 @@ function Game.new(config)
     game._fixedTime = 0
     game._fixedDt = config.fixedDt
 
-    local cameraScale = config.cameraScale or 0.1
-    game._camera = Camera.new({scale = cameraScale})
-
     game._scene = Scene.new()
 
     game._entityFactories = {}
@@ -28,34 +24,48 @@ function Game.new(config)
     game._shaders = {}
     game._sounds = {}
 
+    game._updatePasses = config.updatePasses or {"default"}
+    game._updateSchedule = {}
+    for i, pass in ipairs(game._updatePasses) do
+        game._updateSchedule[pass] = {}
+    end
+
+    game._drawPasses = config.drawPasses or {"default"}
+    game._drawSchedule = {}
+    for i, pass in ipairs(game._drawPasses) do
+        game._drawSchedule[pass] = {}
+    end
+
     return game
 end
 
 function Game:update(dt)
     self._time = self._time + dt
+
     if self._fixedDt then
         if self._fixedTime + self._fixedDt < self._time then
             self._fixedTime = self._fixedTime + self._fixedDt
-            for entity in self._entities:iterate() do
-                entity:update(self._fixedDt)
-            end
+            self:_updateHandlers(self._fixedDt)
         end
     else
         self._fixedTime = self._time
-        for entity in self._entities:iterate() do
-            entity:update(dt)
+        self:_updateHandlers(dt)
+    end
+end
+
+function Game:_updateHandlers(dt)
+    for i, passName in ipairs(self._updatePasses) do
+        for entity, handler in pairs(self._updateSchedule[passName]) do
+            handler(entity, dt)
         end
     end
 end
 
 function Game:draw()
-    local width, height = love.window.getDimensions()
-    self._camera:setViewport(0, height, width, 0)
-    self._camera:draw()
-    love.graphics.setLineWidth(2 * self._camera:getPixelWorldSize())
-
-    for entity in self._entities:iterate() do
-        entity:draw()
+    for i, passName in ipairs(self._drawPasses) do
+        for entity, handler in pairs(self._drawSchedule[passName]) do
+            handler(entity)
+        end
     end
 
     self._scene:draw()
@@ -156,6 +166,22 @@ function Game:playSound(name)
     if sound then
         love.audio.play(sound:clone())
     end
+end
+
+function Game:scheduleUpdate(pass, entity, handler)
+    self._updateSchedule[pass][entity] = handler or entity.update
+end
+
+function Game:unscheduleUpdate(pass, entity)
+    self._updateSchedule[pass][entity] = nil
+end
+
+function Game:scheduleDraw(pass, entity, handler)
+    self._drawSchedule[pass][entity] = handler or entity.draw
+end
+
+function Game:unscheduleDraw(pass, entity)
+    self._drawSchedule[pass][entity] = nil
 end
 
 return Game

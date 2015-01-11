@@ -39,6 +39,20 @@ function math_.toByte4(x, y, z, w)
         math_.clamp(math.floor(w * 256), 0, 255)
 end
 
+function math_.toHexColor4(x, y, z, w)
+    return math_.clamp(17 * math.floor(x * 16), 0, 255),
+        math_.clamp(17 * math.floor(y * 16), 0, 255),
+        math_.clamp(17 * math.floor(z * 16), 0, 255),
+        math_.clamp(17 * math.floor(w * 16), 0, 255)
+end
+
+function math_.toWebColor4(x, y, z, w)
+    return math_.clamp(51 * math.floor(x * 6), 0, 255),
+        math_.clamp(51 * math.floor(y * 6), 0, 255),
+        math_.clamp(51 * math.floor(z * 6), 0, 255),
+        math_.clamp(51 * math.floor(w * 6), 0, 255)
+end
+
 function math_.fromByte(x)
     return x / 255
 end

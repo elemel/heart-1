@@ -13,6 +13,7 @@ function Game.new(config)
     game._time = 0
     game._fixedTime = 0
     game._fixedDt = config.fixedDt
+    game._dt = 0
 
     game._scene = Scene.new()
 
@@ -41,6 +42,7 @@ end
 
 function Game:update(dt)
     self._time = self._time + dt
+    self._dt = dt
 
     if self._fixedDt then
         if self._fixedTime + self._fixedDt < self._time then
@@ -73,6 +75,10 @@ end
 
 function Game:getTime()
     return self._time
+end
+
+function Game:getDt()
+    return self._dt
 end
 
 function Game:getFixedTime()

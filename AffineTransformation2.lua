@@ -49,8 +49,7 @@ function AffineTransformation2:multiplyRight(a, b, c, d, e, f)
 end
 
 function AffineTransformation2:translate(x, y)
-    self.c = self.c + x
-    self.f = self.f + y
+    self:multiply(1, 0, x, 0, 1, y)
 end
 
 function AffineTransformation2:rotate(angle, x, y)
@@ -143,7 +142,7 @@ end
 function AffineTransformation2:toMatrix4()
     return {
         {self.a, self.b, 0, self.c},
-        {self.d, seld.e, 0, self.f},
+        {self.d, self.e, 0, self.f},
         {0, 0, 1, 0},
         {0, 0, 0, 1},
     }
@@ -152,7 +151,7 @@ end
 function AffineTransformation2:toTransposedMatrix4()
     return {
         {self.a, self.d, 0, 0},
-        {self.b, seld.e, 0, 0},
+        {self.b, self.e, 0, 0},
         {0, 0, 1, 0},
         {self.c, self.f, 0, 1},
     }

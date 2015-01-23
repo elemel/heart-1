@@ -135,6 +135,19 @@ function Game:getEntityByType(type_)
     return entity
 end
 
+function Game:getEntityCountByType(type_)
+    local entities = self._entitiesByType[type_]
+    if not entities then
+        return 0
+    end
+
+    local count = 0
+    for entity, _ in pairs(entities) do
+        count = count + 1
+    end
+    return count
+end
+
 function Game:getEntitiesByType(type_)
     return self._entitiesByType[type_]
 end

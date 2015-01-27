@@ -86,6 +86,25 @@ function math_.shuffle(array, random)
     end
 end
 
+function math_.resolveRectangles2(x1, y1, x2, y2, x3, y3, x4, y4)
+    local distanceX = math.min(x4 - x1, x2 - x3)
+    local distanceY = math.min(y4 - y1, y2 - y3)
+
+    if distanceX < distanceY then
+        if x4 - x1 < x2 - x3 then
+            return 1, 0, distanceX
+        else
+            return -1, 0, distanceX
+        end
+    else
+        if y4 - y1 < y2 - y3 then
+            return 0, 1, distanceY
+        else
+            return 0, -1, distanceY
+        end
+    end
+end
+
 -- Adapted from Taehl: http://love2d.org/wiki/HSL_color
 function math_.toRgbFromHsl(h, s, l)
     if s <= 0 then

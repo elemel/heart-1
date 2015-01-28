@@ -105,6 +105,71 @@ function math_.resolveRectangles2(x1, y1, x2, y2, x3, y3, x4, y4)
     end
 end
 
+function math_.intersectsRectangleSlope2(x1, y1, x2, y2, x3, y3, x4, y4)
+    if math.max(x3, x4) < x1 or x2 < math.min(x3, x4) or
+            math.max(y3, y4) < y1 or y2 < math.min(y3, y4) then
+        return false
+    end
+
+    local normalX = y4 - y3
+    local normalY = x3 - x4
+
+    local dotX1 = (x1 - x3) * normalX
+    local dotY1 = (y1 - y3) * normalY
+    local dotX2 = (x2 - x3) * normalX
+    local dotY2 = (y2 - y3) * normalY
+
+    return dotX1 + dotY1 < 0 or dotX2 + dotY1 < 0 or
+        dotX2 + dotY2 < 0 or dotX1 + dotY2 < 0
+end
+
+function math_.resolveRectangleSlope2(x1, y1, x2, y2, x3, y3, x4, y4)
+    local bestNormalX = 0
+    local bestNormalY = 0
+    local bestDistance = math.huge
+
+    if math.max(x3, x4) - x1 < bestDistance then
+        bestNormalX = 1
+        bestNormalY = 0
+        bestDistance = math.max(x3, x4) - x1
+    end
+
+    if x2 - math.min(x3, x4) < bestDistance then
+        bestNormalX = -1
+        bestNormalY = 0
+        bestDistance = x2 - math.min(x3, x4)
+    end
+
+    if math.max(y3, y4) - y1 < bestDistance then
+        bestNormalX = 0
+        bestNormalY = 1
+        bestDistance = math.max(y3, y4) - y1
+    end
+
+    if y2 - math.min(y3, y4) < bestDistance then
+        bestNormalX = 0
+        bestNormalY = -1
+        bestDistance = y2 - math.min(y3, y4)
+    end
+
+    local normalX, normalY = math_.normalize2(y4 - y3, x3 - x4)
+
+    local dotX1 = (x1 - x3) * normalX
+    local dotY1 = (y1 - y3) * normalY
+    local dotX2 = (x2 - x3) * normalX
+    local dotY2 = (y2 - y3) * normalY
+
+    local distance = -math.min(math.min(dotX1 + dotY1, dotX2 + dotY1),
+        math.min(dotX2 + dotY2, dotX1 + dotY2))
+    if distance < bestDistance then
+        bestNormalX = normalX
+        bestNormalY = normalY
+        bestDistance = distance
+    end
+
+    return bestNormalX, bestNormalY, bestDistance
+end
+
 -- Adapted from Taehl: http://love2d.org/wiki/HSL_color
 function math_.toRgbFromHsl(h, s, l)
     if s <= 0 then

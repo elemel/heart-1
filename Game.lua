@@ -180,10 +180,16 @@ function Game:setSound(name, sound)
     self._sounds[name] = sound
 end
 
-function Game:playSound(name)
+function Game:playSound(name, x, y)
+    x = x or 0
+    y = y or 0
+
     local sound = self._sounds[name]
     if sound then
-        love.audio.play(sound:clone())
+        local clonedSound = sound:clone()
+        clonedSound:setPosition(x, y)
+        clonedSound:setAttenuationDistances(1, 50)
+        love.audio.play(clonedSound)
     end
 end
 
